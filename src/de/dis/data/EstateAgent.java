@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * estateAgent-Bean
@@ -75,7 +76,7 @@ public class EstateAgent {
 			Connection con = DbConnectionManager.getInstance().getConnection();
 
 			// Erzeuge Anfrage
-			String selectSQL = "SELECT * FROM estateAgent WHERE id = ?";
+			String selectSQL = "SELECT * FROM \"estateAgent\" WHERE id = ?";
 			PreparedStatement pstmt = con.prepareStatement(selectSQL);
 			pstmt.setInt(1, id);
 
@@ -98,6 +99,44 @@ public class EstateAgent {
 		}
 		return null;
 	}
+
+
+	/**
+	 * Lädt alle estateAgent aus der Datenbank
+	 * @return estateAgent-Instanzen
+	 */
+	public static ArrayList<EstateAgent> loadAll() {
+		try {
+			// Hole Verbindung
+			Connection con = DbConnectionManager.getInstance().getConnection();
+
+			ArrayList<EstateAgent> agents = new ArrayList<>();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM \"estateAgent\" ";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+
+			// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next())
+			 {
+				EstateAgent ts = new EstateAgent();
+				ts.setId(rs.getInt("id"));
+				ts.setName(rs.getString("name"));
+				ts.setAddress(rs.getString("address"));
+				ts.setLogin(rs.getString("login"));
+				ts.setPassword(rs.getString("password"));
+
+				agents.add(ts);
+			}
+			rs.close();
+			pstmt.close();
+			return agents;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	/**
 	 * Speichert den estateAgent in der Datenbank. Ist noch keine ID vergeben
@@ -112,7 +151,7 @@ public class EstateAgent {
 			if (getId() == -1) {
 				// Achtung, hier wird noch ein Parameter mitgegeben,
 				// damit spC$ter generierte IDs zurC<ckgeliefert werden!
-				String insertSQL = "INSERT INTO estateAgent(name, address, login, password) VALUES (?, ?, ?, ?)";
+				String insertSQL = "INSERT INTO \"estateAgent\"(name, address, login, password) VALUES (?, ?, ?, ?)";
 
 				PreparedStatement pstmt = con.prepareStatement(insertSQL,
 						Statement.RETURN_GENERATED_KEYS);
@@ -127,14 +166,14 @@ public class EstateAgent {
 				// Hole die Id des engefC<gten Datensatzes
 				ResultSet rs = pstmt.getGeneratedKeys();
 				if (rs.next()) {
-					setId(rs.getInt(1));
+					setId(rs.getInt(5));
 				}
 
 				rs.close();
 				pstmt.close();
 			} else {
 				// Falls schon eine ID vorhanden ist, mache ein Update...
-				String updateSQL = "UPDATE estateAgent SET name = ?, address = ?, login = ?, password = ? WHERE id = ?";
+				String updateSQL = "UPDATE \"estateAgent\" SET name = ?, address = ?, login = ?, password = ? WHERE id = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
 				// Setze Anfrage Parameter

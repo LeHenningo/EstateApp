@@ -100,6 +100,28 @@ public class EstateAgent {
 		return null;
 	}
 
+	/**
+	 * Löscht einen estateAgent aus der Datenbank
+	 * @param id ID des zu ladenden estateAgents
+	 *
+	 */
+	public static void delete(int id) {
+		try {
+			// Hole Verbindung
+			Connection con = DbConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "DELETE FROM \"estateAgent\" WHERE id = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	/**
 	 * Lädt alle estateAgent aus der Datenbank

@@ -46,15 +46,22 @@ public class Main {
      * Zeigt die Maklerverwaltung
      */
     public static void showMaklerMenu() {
+
+        // Password to enter makler mode: test
+        String password = FormUtil.readString("Enter Password for accessing Maklerverwaltung");
+        if(Objects.equals(password, "test")) {
+
         //Menüoptionen
         final int NEW_MAKLER = 0;
         final int UPDATE_MAKLER = 1;
-        final int BACK = 2;
+        final int DELETE_MAKLER = 2;
+        final int BACK = 3;
 
         //Maklerverwaltungsmenü
         Menu maklerMenu = new Menu("Makler-Verwaltung");
         maklerMenu.addEntry("Neuer Makler", NEW_MAKLER);
         maklerMenu.addEntry("Makler aktualisieren", UPDATE_MAKLER);
+        maklerMenu.addEntry("Makler löschen", DELETE_MAKLER);
         maklerMenu.addEntry("Zurück zum Hauptmenü", BACK);
 
         //Verarbeite Eingabe
@@ -68,10 +75,19 @@ public class Main {
                 case UPDATE_MAKLER:
                     updateMakler();
                     break;
+                case DELETE_MAKLER:
+                    deleteMakler();
+                    break;
                 case BACK:
                     return;
             }
         }
+
+        } else {
+            System.out.println("Falsches Passwort.");
+            return;
+        }
+
     }
 
     /**
@@ -99,7 +115,7 @@ public class Main {
             System.out.println(agent.getId() + " " + agent.getName());
         }
 
-        Integer id = FormUtil.readInt("Id: ");
+        Integer id = FormUtil.readInt("Id");
 
         try {
             EstateAgent selectedAgent = EstateAgent.load(id);
@@ -145,5 +161,17 @@ public class Main {
            System.out.println("Error at selecting Makler " + e.getMessage());
         }
 
+    }
+
+    public static  void deleteMakler(){
+        System.out.println("Wähle den zu löschenden Makler");
+        for (EstateAgent agent : Objects.requireNonNull(EstateAgent.loadAll())
+        ) {
+            System.out.println(agent.getId() + " " + agent.getName());
+        }
+
+        Integer id = FormUtil.readInt("Gewählte Id");
+
+        EstateAgent.delete(id);
     }
 }

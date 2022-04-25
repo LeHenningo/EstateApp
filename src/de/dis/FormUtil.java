@@ -49,4 +49,42 @@ public class FormUtil {
 		
 		return ret;
 	}
+
+	public static float readFloat(String label) {
+		float ret = 0;
+		boolean finished = false;
+
+		while(!finished) {
+			String line = readString(label);
+
+			try {
+				ret = Float.parseFloat(line);
+				finished = true;
+			} catch (NumberFormatException e) {
+				System.err.println("Ungültige Eingabe: Bitte geben Sie eine Zahl an!");
+			}
+		}
+
+		return ret;
+	}
+
+	public static Boolean readBoolean(String label) {
+		Boolean ret = false;
+		boolean finished = false;
+
+		while(!finished) {
+			String line = readString(label);
+
+			try {
+				ret = Boolean.parseBoolean(line);
+				finished = true;
+			} catch (NumberFormatException e) {
+				System.err.println("Ungültige Eingabe: Bitte geben Sie eine Zahl an!");
+			}
+		}
+
+		return ret;
+	}
+
+
 }

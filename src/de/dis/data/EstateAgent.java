@@ -292,10 +292,13 @@ public class EstateAgent {
 				return ts.getPassword().equals(password);
 
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		return null;
+
+		catch (SQLException ignore) {
+			return false;
+
+		}
+		return false;
 	}
 
 

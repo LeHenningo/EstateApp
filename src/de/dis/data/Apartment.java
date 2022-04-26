@@ -65,8 +65,10 @@ public class Apartment extends Estate{
             // Führe Anfrage aus
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Apartment ts = new Apartment();
-                getDataFromResultSet(rs);
+                Apartment ts = getDataFromResultSet(rs);
+                rs.close();
+                pstmt.close();
+                return ts;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,7 +112,7 @@ public class Apartment extends Estate{
             if (getId() == -1) {
                 // Achtung, hier wird noch ein Parameter mitgegeben,
                 // damit spC$ter generierte IDs zurC<ckgeliefert werden!
-                String insertSQL = "INSERT INTO \"apartment\"(city, postalcode, street, streetnumber, squarearea, floor, rent, rooms, balcony, builtInKitchen, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?))";
+                String insertSQL = "INSERT INTO \"apartment\"(city, postalcode, street, streetnumber, squarearea, floor, rent, rooms, balcony, builtInKitchen, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 PreparedStatement pstmt = con.prepareStatement(insertSQL,
                         Statement.RETURN_GENERATED_KEYS);
@@ -139,7 +141,7 @@ public class Apartment extends Estate{
                 pstmt.close();
             } else {
                 // Falls schon eine ID vorhanden ist, mache ein Update...
-                String updateSQL = "UPDATE \"house\" SET city = ?, postalcode = ?, street = ?, streetnumber = ?, squarearea = ?, floor = ?, rent = ?, rooms = ?, balcony = ?, builtInKitchen = ?, estateagent = ?  WHERE id = ?";
+                String updateSQL = "UPDATE \"apartment\" SET city = ?, postalcode = ?, street = ?, streetnumber = ?, squarearea = ?, floor = ?, rent = ?, rooms = ?, balcony = ?, builtInKitchen = ?, estateagent = ?  WHERE id = ?";
                 PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
                 // Setze Anfrage Parameter
@@ -153,8 +155,8 @@ public class Apartment extends Estate{
                 pstmt.setFloat(8, getRooms());
                 pstmt.setBoolean(9, getBalcony());
                 pstmt.setBoolean(10, getBuiltInKitchen());
-                pstmt.setInt(10, getEstateAgent().getId());
-                pstmt.setInt(11, getId());
+                pstmt.setInt(11, getEstateAgent().getId());
+                pstmt.setInt(12, getId());
                 pstmt.executeUpdate();
 
                 pstmt.close();
@@ -180,8 +182,6 @@ public class Apartment extends Estate{
             ts.setRooms(rs.getFloat("rooms"));
             ts.setBalcony(rs.getBoolean("balcony"));
             ts.setBuiltInKitchen(rs.getBoolean("builtinkitchen"));
-
-            rs.close();
 
             return ts;
         }

@@ -47,8 +47,11 @@ private Boolean garden;
             // Führe Anfrage aus
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                House ts = new House();
-                getDataFromResultSet(rs);
+
+                House ts = getDataFromResultSet(rs);
+                rs.close();
+                pstmt.close();
+                return ts;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,6 +80,7 @@ private Boolean garden;
             while (rs.next())
             {
                 House ts = getDataFromResultSet(rs);
+
                 houses.add(ts);
             }
             rs.close();
@@ -97,7 +101,7 @@ private Boolean garden;
             if (getId() == -1) {
                 // Achtung, hier wird noch ein Parameter mitgegeben,
                 // damit spC$ter generierte IDs zurC<ckgeliefert werden!
-                String insertSQL = "INSERT INTO \"house\"(city, postalcode, street, streetnumber, squarearea, floors, price, garden, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?))";
+                String insertSQL = "INSERT INTO \"house\"(city, postalcode, street, streetnumber, squarearea, floors, price, garden, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 PreparedStatement pstmt = con.prepareStatement(insertSQL,
                         Statement.RETURN_GENERATED_KEYS);
@@ -136,7 +140,8 @@ private Boolean garden;
                 pstmt.setInt(6, getFloors());
                 pstmt.setFloat(7, getPrice());
                 pstmt.setBoolean(8, getGarden());
-                pstmt.setInt(9, getId());
+                pstmt.setInt(9, getEstateAgent().getId());
+                pstmt.setInt(10, getId());
                 pstmt.executeUpdate();
 
                 pstmt.close();
@@ -162,8 +167,6 @@ private Boolean garden;
             ts.setPrice(rs.getFloat("price"));
             ts.setGarden(rs.getBoolean("garden"));
             ts.setFloors(rs.getInt("floors"));
-
-            rs.close();
 
             return ts;
         }

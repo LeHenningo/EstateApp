@@ -42,6 +42,7 @@ public class HouseService {
         try {
             House selectedHouse = House.load(id);
             if (selectedHouse != null) {
+
                 System.out.println("Gewähltes Haus: " + selectedHouse.getStreet() + " " + selectedHouse.getStreetnumber());
                 System.out.println("Welches Attribut soll aktualisiert werden?");
                 //Menüoptionen

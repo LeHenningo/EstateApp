@@ -3,51 +3,69 @@ package de.dis.data;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class House extends Estate{
+public class Apartment extends Estate{
 
-private int floors;
-private float price;
-private Boolean garden;
+    private int floor;
+    private float rent;
+    private float rooms;
+    private Boolean balcony;
+    private Boolean builtInKitchen;
 
-    public int getFloors() {
-        return floors;
+
+    public int getFloor() {
+        return floor;
+    }
+    public float getRent() {
+        return rent;
     }
 
-    public float getPrice() {
-        return price;
+    public float getRooms() {
+        return rooms;
     }
 
-    public Boolean getGarden() {
-        return garden;
+    public Boolean getBalcony() {
+        return balcony;
     }
 
-    public void setFloors(int floors) {
-        this.floors = floors;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public void setGarden(Boolean garden) {
-        this.garden = garden;
+    public Boolean getBuiltInKitchen() {
+        return builtInKitchen;
     }
 
 
-    public static House load(int id) {
+    public void setFloor(int floor) {
+        this.floor = floor;
+    }
+
+    public void setRent(float rent) {
+        this.rent = rent;
+    }
+
+    public void setRooms(float rooms) {
+        this.rooms = rooms;
+    }
+
+    public void setBalcony(Boolean balcony) {
+        this.balcony = balcony;
+    }
+
+    public void setBuiltInKitchen(Boolean builtInKitchen) {
+        this.builtInKitchen = builtInKitchen;
+    }
+
+    public static Apartment load(int id) {
         try {
             // Hole Verbindung
             Connection con = DbConnectionManager.getInstance().getConnection();
 
             // Erzeuge Anfrage
-            String selectSQL = "SELECT * FROM \"house\" WHERE id = ?";
+            String selectSQL = "SELECT * FROM \"apartment\" WHERE id = ?";
             PreparedStatement pstmt = con.prepareStatement(selectSQL);
             pstmt.setInt(1, id);
 
             // Führe Anfrage aus
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                House ts = new House();
+                Apartment ts = new Apartment();
                 getDataFromResultSet(rs);
             }
         } catch (SQLException e) {
@@ -56,32 +74,27 @@ private Boolean garden;
         return null;
     }
 
-
-    /**
-     * Lädt alle estateAgent aus der Datenbank
-     * @return estateAgent-Instanzen
-     */
-    public static ArrayList<House> loadAll() {
+    public static ArrayList<Apartment> loadAll() {
         try {
             // Hole Verbindung
             Connection con = DbConnectionManager.getInstance().getConnection();
 
-            ArrayList<House> houses = new ArrayList<>();
+            ArrayList<Apartment> apartments = new ArrayList<>();
 
             // Erzeuge Anfrage
-            String selectSQL = "SELECT * FROM \"house\" ";
+            String selectSQL = "SELECT * FROM \"apartment\" ";
             PreparedStatement pstmt = con.prepareStatement(selectSQL);
 
             // Führe Anfrage aus
             ResultSet rs = pstmt.executeQuery();
             while (rs.next())
             {
-                House ts = getDataFromResultSet(rs);
-                houses.add(ts);
+                Apartment ts = getDataFromResultSet(rs);
+                apartments.add(ts);
             }
             rs.close();
             pstmt.close();
-            return houses;
+            return apartments;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +110,7 @@ private Boolean garden;
             if (getId() == -1) {
                 // Achtung, hier wird noch ein Parameter mitgegeben,
                 // damit spC$ter generierte IDs zurC<ckgeliefert werden!
-                String insertSQL = "INSERT INTO \"house\"(city, postalcode, street, streetnumber, squarearea, floors, price, garden, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?))";
+                String insertSQL = "INSERT INTO \"apartment\"(city, postalcode, street, streetnumber, squarearea, floor, rent, rooms, balcony, builtInKitchen, estateagent) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?))";
 
                 PreparedStatement pstmt = con.prepareStatement(insertSQL,
                         Statement.RETURN_GENERATED_KEYS);
@@ -108,10 +121,12 @@ private Boolean garden;
                 pstmt.setString(3, getStreet());
                 pstmt.setInt(4, getStreetnumber());
                 pstmt.setInt(5, getSquarearea());
-                pstmt.setInt(6, getFloors());
-                pstmt.setFloat(7, getPrice());
-                pstmt.setBoolean(8, getGarden());
-                pstmt.setInt(9, getEstateAgent().getId());
+                pstmt.setInt(6, getFloor());
+                pstmt.setFloat(7, getRent());
+                pstmt.setFloat(8, getRooms());
+                pstmt.setBoolean(9, getBalcony());
+                pstmt.setBoolean(10, getBuiltInKitchen());
+                pstmt.setInt(11, getEstateAgent().getId());
                 pstmt.executeUpdate();
 
                 // Hole die Id des engefC<gten Datensatzes
@@ -124,7 +139,7 @@ private Boolean garden;
                 pstmt.close();
             } else {
                 // Falls schon eine ID vorhanden ist, mache ein Update...
-                String updateSQL = "UPDATE \"house\" SET city = ?, postalcode = ?, street = ?, streetnumber = ?, squarearea = ?, floors = ?, price = ?, garden = ?, estateagent = ?  WHERE id = ?";
+                String updateSQL = "UPDATE \"house\" SET city = ?, postalcode = ?, street = ?, streetnumber = ?, squarearea = ?, floor = ?, rent = ?, rooms = ?, balcony = ?, builtInKitchen = ?, estateagent = ?  WHERE id = ?";
                 PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
                 // Setze Anfrage Parameter
@@ -133,10 +148,13 @@ private Boolean garden;
                 pstmt.setString(3, getStreet());
                 pstmt.setInt(4, getStreetnumber());
                 pstmt.setInt(5, getSquarearea());
-                pstmt.setInt(6, getFloors());
-                pstmt.setFloat(7, getPrice());
-                pstmt.setBoolean(8, getGarden());
-                pstmt.setInt(9, getId());
+                pstmt.setInt(6, getFloor());
+                pstmt.setFloat(7, getRent());
+                pstmt.setFloat(8, getRooms());
+                pstmt.setBoolean(9, getBalcony());
+                pstmt.setBoolean(10, getBuiltInKitchen());
+                pstmt.setInt(10, getEstateAgent().getId());
+                pstmt.setInt(11, getId());
                 pstmt.executeUpdate();
 
                 pstmt.close();
@@ -147,11 +165,9 @@ private Boolean garden;
     }
 
 
-
-
-    public static House getDataFromResultSet(ResultSet rs){
+    public static Apartment getDataFromResultSet(ResultSet rs){
         try {
-            House ts = new House();
+            Apartment ts = new Apartment();
             ts.setId(rs.getInt("id"));
             ts.setCity(rs.getString("city"));
             ts.setStreet(rs.getString("street"));
@@ -159,9 +175,11 @@ private Boolean garden;
             ts.setSquarearea(rs.getInt("squarearea"));
             ts.setEstateAgent(EstateAgent.load(rs.getInt("estateagent")) );
 
-            ts.setPrice(rs.getFloat("price"));
-            ts.setGarden(rs.getBoolean("garden"));
-            ts.setFloors(rs.getInt("floors"));
+            ts.setFloor(rs.getInt("floor"));
+            ts.setRent(rs.getFloat("rent"));
+            ts.setRooms(rs.getFloat("rooms"));
+            ts.setBalcony(rs.getBoolean("balcony"));
+            ts.setBuiltInKitchen(rs.getBoolean("builtinkitchen"));
 
             rs.close();
 
@@ -172,6 +190,13 @@ private Boolean garden;
         }
         return null;
     }
+
+
+
+
+
+
+
 
 
 }

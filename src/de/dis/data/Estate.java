@@ -1,5 +1,6 @@
 package de.dis.data;
 
+//vererebende Klasse fuer House und Apartment
 public abstract class Estate {
 
     private int id = -1;

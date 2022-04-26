@@ -20,9 +20,7 @@ public class HouseService {
         m.setStreetnumber(FormUtil.readInt("Streetnumber"));
         m.setSquarearea(FormUtil.readInt("Squarearea"));
         m.setFloors(FormUtil.readInt("Floors"));
-        //TODO readFloat muss erstellt werden
         m.setPrice(FormUtil.readFloat("Price"));
-        //TODO readBoolean muss erstellt werden
         m.setGarden(FormUtil.readBoolean("Garden"));
         m.setEstateAgent(EstateAgent.load(FormUtil.readInt("EstateAgentID")));
 
@@ -114,7 +112,7 @@ public class HouseService {
 
     public static void deleteHouse() {
 
-        //TODO
+//TODO
 
     }
 

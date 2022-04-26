@@ -1,11 +1,6 @@
 package de.dis;
 
-import de.dis.data.Estate;
-import de.dis.data.EstateAgent;
 import de.dis.data.House;
-
-import java.text.Normalizer;
-import java.util.Objects;
 
 /**
  * Hauptklasse

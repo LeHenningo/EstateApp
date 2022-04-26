@@ -166,6 +166,23 @@ public class Apartment extends Estate{
         }
     }
 
+    public static void delete(int id) {
+        try {
+            // Hole Verbindung
+            Connection con = DbConnectionManager.getInstance().getConnection();
+
+            // Erzeuge Anfrage
+            String selectSQL = "DELETE FROM \"apartment\" WHERE id = ?";
+            PreparedStatement pstmt = con.prepareStatement(selectSQL);
+            pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static Apartment getDataFromResultSet(ResultSet rs){
         try {

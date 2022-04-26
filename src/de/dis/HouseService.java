@@ -113,9 +113,19 @@ public class HouseService {
 
     public static void deleteHouse() {
 
-//TODO
+        System.out.println("Wähle den zu löschenden House");
+        for (House house : Objects.requireNonNull(House.loadAll())
+        ) {
+            System.out.println(house.getId() + " " + house.getStreet() + " " + house.getStreetnumber());
+        }
 
+        Integer id = FormUtil.readInt("Gewählte Id");
+
+        House.delete(id);
     }
+
+
+
 
 
 

@@ -129,7 +129,16 @@ public class ApartmentService {
 
     public static void deleteApartment() {
 
-//TODO
+        System.out.println("Wähle den zu löschenden Apartment");
+        for (Apartment apartment : Objects.requireNonNull(Apartment.loadAll())
+        ) {
+            System.out.println(apartment.getId() + " " + apartment.getStreet() + " " + apartment.getStreetnumber());
+        }
 
+        Integer id = FormUtil.readInt("Gewählte Id");
+
+        Apartment.delete(id);
     }
+
+
 }

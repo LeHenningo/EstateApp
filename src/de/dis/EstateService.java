@@ -1,5 +1,9 @@
 package de.dis;
 
+import de.dis.data.EstateAgent;
+
+import java.util.Objects;
+
 public class EstateService {
 
     public static void showEstateMenu() {
@@ -12,50 +16,56 @@ public class EstateService {
         final int DELETE_Apartment = 5;
         final int BACK = 6;
 
-        //Maklerverwaltungsmenü
-        Menu maklerMenu = new Menu("Estate-Management");
-        maklerMenu.addEntry("NEW_House", NEW_House);
-        maklerMenu.addEntry("UPDATE_House", UPDATE_House);
-        maklerMenu.addEntry("DELETE_House", DELETE_House);
-        maklerMenu.addEntry("NEW_Apartment", NEW_Apartment);
-        maklerMenu.addEntry("UPDATE_Apartment", UPDATE_Apartment);
-        maklerMenu.addEntry("DELETE_Apartment", DELETE_Apartment);
 
-        maklerMenu.addEntry("Zurück zum Hauptmenü", BACK);
+        String login  = FormUtil.readString("Enter login for accessing Estate Management");
+        String password = FormUtil.readString("Enter Password for accessing Estate Management");
 
-        //Verarbeite Eingabe
-        while (true) {
-            int response = maklerMenu.show();
+        if(EstateAgent.checkLogIn(login, password) == true) {
 
-            switch (response) {
-                case NEW_House:
-                    HouseService.newHouse();
-                    break;
-                case UPDATE_House:
-                    HouseService.updateHouse();
-                    break;
-                case DELETE_House:
-                    HouseService.deleteHouse();
-                    break;
-                case NEW_Apartment:
-                    ApartmentService.newApartment();
-                    break;
-                case UPDATE_Apartment:
-                    ApartmentService.updateApartment();
-                    break;
-                case DELETE_Apartment:
-                    ApartmentService.deleteApartment();
-                    break;
-                case BACK:
-                    return;
-            }
+            //Maklerverwaltungsmenü
+            Menu maklerMenu = new Menu("Estate-Management");
+            maklerMenu.addEntry("NEW_House", NEW_House);
+            maklerMenu.addEntry("UPDATE_House", UPDATE_House);
+            maklerMenu.addEntry("DELETE_House", DELETE_House);
+            maklerMenu.addEntry("NEW_Apartment", NEW_Apartment);
+            maklerMenu.addEntry("UPDATE_Apartment", UPDATE_Apartment);
+            maklerMenu.addEntry("DELETE_Apartment", DELETE_Apartment);
+
+            maklerMenu.addEntry("Zurück zum Hauptmenü", BACK);
+
+            //Verarbeite Eingabe
+            while (true) {
+                int response = maklerMenu.show();
+
+                switch (response) {
+                    case NEW_House:
+                        HouseService.newHouse();
+                        break;
+                    case UPDATE_House:
+                        HouseService.updateHouse();
+                        break;
+                    case DELETE_House:
+                        HouseService.deleteHouse();
+                        break;
+                    case NEW_Apartment:
+                        ApartmentService.newApartment();
+                        break;
+                    case UPDATE_Apartment:
+                        ApartmentService.updateApartment();
+                        break;
+                    case DELETE_Apartment:
+                        ApartmentService.deleteApartment();
+                        break;
+                    case BACK:
+                        return;
+                                }
+             }
         }
 
+        else {showEstateMenu();}
 
     }
 
 
-
-
-
 }
+

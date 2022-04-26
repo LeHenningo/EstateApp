@@ -264,4 +264,42 @@ public class EstateAgent {
 			e.printStackTrace();
 		}
 	}
+
+	public static Boolean checkLogIn(String login, String password){
+
+		try {
+			// Hole Verbindung
+			Connection con = DbConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM \"estateAgent\" WHERE login = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, login);
+
+			// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				EstateAgent ts = new EstateAgent();
+
+				ts.setName(rs.getString("name"));
+				ts.setAddress(rs.getString("address"));
+				ts.setLogin(rs.getString("login"));
+				ts.setPassword(rs.getString("password"));
+
+				rs.close();
+				pstmt.close();
+
+				return ts.getPassword().equals(password);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+
+
 }
